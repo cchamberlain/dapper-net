@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Dapper.Net.Patterns.Chainables;
+using Dapper.Net.Patterns.Chainable;
 
 namespace Dapper.Net.Extensions {
 

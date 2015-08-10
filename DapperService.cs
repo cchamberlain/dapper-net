@@ -5,7 +5,9 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper.Net.Caching;
 using Dapper.Net.Extensions;
-using Dapper.Net.Patterns.Chainables;
+using Dapper.Net.Patterns.Chainable;
+using Dapper.Net.Patterns.Chainable.Syntax.Clause;
+using Dapper.Net.Patterns.Chainable.Syntax.Statement;
 
 namespace Dapper.Net
 {
@@ -111,7 +113,7 @@ public abstract class DapperService {
         }
     }
     protected IEnumerable<T> Query<T>(ISqlStatement statement, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null, CommandType? commandType = null)
-        => Query<T>(statement.ToSql(), statement.Param, transaction, buffered, commandTimeout, commandType);
+        => Query<T>(statement.ToSql(), statement.GetParam(), transaction, buffered, commandTimeout, commandType);
 
     protected IEnumerable<T> Query<T>(Enum sql, object param = null, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null, CommandType? commandType = null)
         => Query<T>(sql.GetDescription(), param, transaction, buffered, commandTimeout, commandType);
@@ -126,7 +128,7 @@ public abstract class DapperService {
         => Query<T>(sql, param, transaction, buffered, commandTimeout, CommandType.StoredProcedure);
 
     protected IEnumerable<T> QuerySProc<T>(ISqlStatement statement, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null)
-        => Query<T>(statement.ToSql(), statement.Param, transaction, buffered, commandTimeout, CommandType.StoredProcedure);
+        => Query<T>(statement.ToSql(), statement.GetParam(), transaction, buffered, commandTimeout, CommandType.StoredProcedure);
 
     protected IEnumerable<T> QuerySProc<T>(Enum sql, object param = null, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null)
         => QuerySProc<T>(sql.GetDescription(), param, transaction, buffered, commandTimeout);
@@ -137,7 +139,7 @@ public abstract class DapperService {
         => CacheProvider.GetWithRefresh(key, () => Query<T>(sql, param, transaction, buffered, commandTimeout, commandType), cacheTime);
 
     protected IEnumerable<T> CacheOrQuery<T>(string key, ISqlStatement statement, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime) where T : class
-        => CacheProvider.GetWithRefresh(key, () => Query<T>(statement.ToSql(), statement.Param, transaction, buffered, commandTimeout, commandType), cacheTime);
+        => CacheProvider.GetWithRefresh(key, () => Query<T>(statement.ToSql(), statement.GetParam(), transaction, buffered, commandTimeout, commandType), cacheTime);
 
     protected IEnumerable<T> CacheOrQuery<T>(string key, Enum sql, object param = null, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime) where T : class
         => CacheOrQuery<T>(key, sql.GetDescription(), param, transaction, buffered, commandTimeout, commandType, cacheTime);
@@ -152,7 +154,7 @@ public abstract class DapperService {
         => CacheOrQuery<T>(key, sql, param, transaction, buffered, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected IEnumerable<T> CacheOrQuerySProc<T>(string key, ISqlStatement statement, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null, int cacheTime = DefaultCacheTime) where T : class
-        => CacheOrQuery<T>(key, statement.ToSql(), statement.Param, transaction, buffered, commandTimeout, CommandType.StoredProcedure, cacheTime);
+        => CacheOrQuery<T>(key, statement.ToSql(), statement.GetParam(), transaction, buffered, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected IEnumerable<T> CacheOrQuerySProc<T>(string key, Enum sql, object param = null, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null, int cacheTime = DefaultCacheTime) where T : class
         => CacheOrQuerySProc<T>(key, sql.GetDescription(), param, transaction, buffered, commandTimeout, cacheTime);
@@ -166,7 +168,7 @@ public abstract class DapperService {
     }
 
     protected int Execute(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
-        => Execute(statement.ToSql(), statement.Param, transaction, commandTimeout, commandType);
+        => Execute(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType);
 
     protected int Execute(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
         => Execute(sql.GetDescription(), param, transaction, commandTimeout, commandType);
@@ -181,7 +183,7 @@ public abstract class DapperService {
         => Execute(sql, param, transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected int ExecuteSProc(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null)
-        => Execute(statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure);
+        => Execute(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected int ExecuteSProc(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null)
         => ExecuteSProc(sql.GetDescription(), param, transaction, commandTimeout);
@@ -196,7 +198,7 @@ public abstract class DapperService {
     }
 
     protected T Execute<T>(ISqlStatement statement, string returnParam, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue)
-        => Execute<T>(statement.ToSql(), returnParam, statement.Param, transaction, commandTimeout, commandType, returnParamDirection);
+        => Execute<T>(statement.ToSql(), returnParam, statement.GetParam(), transaction, commandTimeout, commandType, returnParamDirection);
 
     protected T Execute<T>(Enum sql, string returnParam, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue)
         => Execute<T>(sql.GetDescription(), returnParam, param, transaction, commandTimeout, commandType, returnParamDirection);
@@ -211,7 +213,7 @@ public abstract class DapperService {
         => Execute<T>(sql, returnParam, param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection);
 
     protected T ExecuteSProc<T>(ISqlStatement statement, string returnParam, IDbTransaction transaction = null, int? commandTimeout = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue)
-        => Execute<T>(statement.ToSql(), returnParam, statement.Param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection);
+        => Execute<T>(statement.ToSql(), returnParam, statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection);
 
     protected T ExecuteSProc<T>(Enum sql, string returnParam, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue)
         => Execute<T>(sql.GetDescription(), returnParam, param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection);
@@ -222,7 +224,7 @@ public abstract class DapperService {
         => CacheProvider.GetWithRefresh(key, () => Execute<T>(sql, returnParam, param, transaction, commandTimeout, commandType, returnParamDirection), cacheTime);
 
     protected T CacheOrExecute<T>(string key, ISqlStatement statement, string returnParam, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue, int cacheTime = DefaultCacheTime) where T : class
-        => CacheProvider.GetWithRefresh(key, () => Execute<T>(statement.ToSql(), returnParam, statement.Param, transaction, commandTimeout, commandType, returnParamDirection), cacheTime);
+        => CacheProvider.GetWithRefresh(key, () => Execute<T>(statement.ToSql(), returnParam, statement.GetParam(), transaction, commandTimeout, commandType, returnParamDirection), cacheTime);
 
     protected T CacheOrExecute<T>(string key, Enum sql, string returnParam, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue, int cacheTime = DefaultCacheTime) where T : class
         => CacheOrExecute<T>(key, sql.GetDescription(), returnParam, param, transaction, commandTimeout, commandType, returnParamDirection, cacheTime);
@@ -237,7 +239,7 @@ public abstract class DapperService {
         => CacheOrExecute<T>(key, sql, returnParam, param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection, cacheTime);
 
     protected T CacheOrExecuteSProc<T>(string key, ISqlStatement statement, string returnParam, IDbTransaction transaction = null, int? commandTimeout = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue, int cacheTime = DefaultCacheTime) where T : class
-        => CacheOrExecute<T>(key, statement.ToSql(), returnParam, statement.Param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection, cacheTime);
+        => CacheOrExecute<T>(key, statement.ToSql(), returnParam, statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection, cacheTime);
 
     protected T CacheOrExecuteSProc<T>(string key, Enum sql, string returnParam, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue, int cacheTime = DefaultCacheTime) where T : class
         => CacheOrExecute<T>(key, sql.GetDescription(), returnParam, param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection, cacheTime);
@@ -251,7 +253,7 @@ public abstract class DapperService {
     }
 
     protected T ExecuteScalar<T>(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
-        => ExecuteScalar<T>(statement.ToSql(), statement.Param, transaction, commandTimeout, commandType);
+        => ExecuteScalar<T>(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType);
 
     protected T ExecuteScalar<T>(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
         => ExecuteScalar<T>(sql.GetDescription(), param, transaction, commandTimeout, commandType);
@@ -266,7 +268,7 @@ public abstract class DapperService {
         => ExecuteScalar<T>(sql, param, transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected T ExecuteScalarSProc<T>(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null)
-        => ExecuteScalar<T>(statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure);
+        => ExecuteScalar<T>(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected T ExecuteScalarSProc<T>(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null)
         => ExecuteScalarSProc<T>(sql.GetDescription(), param, transaction, commandTimeout);
@@ -278,7 +280,7 @@ public abstract class DapperService {
         => CacheProvider.GetWithRefresh(key, () => ExecuteScalar<T>(sql, param, transaction, commandTimeout, commandType), cacheTime);
 
     protected T CacheOrExecuteScalar<T>(string key, ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime) where T : class
-        => CacheOrExecuteScalar<T>(key, statement.ToSql(), statement.Param, transaction, commandTimeout, commandType, cacheTime);
+        => CacheOrExecuteScalar<T>(key, statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType, cacheTime);
 
     protected T CacheOrExecuteScalar<T>(string key, Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime) where T : class
         => CacheOrExecuteScalar<T>(key, sql.GetDescription(), param, transaction, commandTimeout, commandType, cacheTime);
@@ -293,7 +295,7 @@ public abstract class DapperService {
         => CacheOrExecuteScalar<T>(key, sql, param, transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected T CacheOrExecuteScalarSProc<T>(string key, ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, int cacheTime = DefaultCacheTime) where T : class
-        => CacheOrExecuteScalar<T>(key, statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
+        => CacheOrExecuteScalar<T>(key, statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected T CacheOrExecuteScalarSProc<T>(string key, Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, int cacheTime = DefaultCacheTime) where T : class
         => CacheOrExecuteScalarSProc<T>(key, sql.GetDescription(), param, transaction, commandTimeout, cacheTime);
@@ -307,7 +309,7 @@ public abstract class DapperService {
     }
 
     protected SqlMapper.GridReader QueryMultiple(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
-        => QueryMultiple(statement.ToSql(), statement.Param, transaction, commandTimeout, commandType);
+        => QueryMultiple(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType);
 
     protected SqlMapper.GridReader QueryMultiple(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
         => QueryMultiple(sql.GetDescription(), param, transaction, commandTimeout, commandType);
@@ -322,7 +324,7 @@ public abstract class DapperService {
         => QueryMultiple(sql, param, transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected SqlMapper.GridReader QueryMultipleSProc(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null)
-        => QueryMultiple(statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure);
+        => QueryMultiple(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected SqlMapper.GridReader QueryMultipleSProc(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null)
         => QueryMultipleSProc(sql.GetDescription(), param, transaction, commandTimeout);
@@ -333,7 +335,7 @@ public abstract class DapperService {
         => CacheProvider.GetWithRefresh(key, () => QueryMultiple(sql, param, transaction, commandTimeout, commandType), cacheTime);
 
     protected SqlMapper.GridReader CacheOrQueryMultiple(string key, ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime)
-        => CacheOrQueryMultiple(key, statement.ToSql(), statement.Param, transaction, commandTimeout, commandType, cacheTime);
+        => CacheOrQueryMultiple(key, statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType, cacheTime);
 
     protected SqlMapper.GridReader CacheOrQueryMultiple(string key, Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime)
         => CacheOrQueryMultiple(key, sql.GetDescription(), param, transaction, commandTimeout, commandType, cacheTime);
@@ -348,7 +350,7 @@ public abstract class DapperService {
         => CacheOrQueryMultiple(key, sql, param, transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected SqlMapper.GridReader CacheOrQueryMultipleSProc(string key, ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, int cacheTime = DefaultCacheTime)
-        => CacheOrQueryMultiple(key, statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
+        => CacheOrQueryMultiple(key, statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected SqlMapper.GridReader CacheOrQueryMultipleSProc(string key, Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, int cacheTime = DefaultCacheTime)
         => CacheOrQueryMultipleSProc(key, sql.GetDescription(), param, transaction, commandTimeout, cacheTime);
@@ -367,7 +369,7 @@ public abstract class DapperService {
     }
 
     protected async Task<IEnumerable<T>> QueryAsync<T>(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
-        => await QueryAsync<T>(statement.ToSql(), statement.Param, transaction, commandTimeout, commandType);
+        => await QueryAsync<T>(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType);
 
     protected async Task<IEnumerable<T>> QueryAsync<T>(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
         => await QueryAsync<T>(sql.GetDescription(), param, transaction, commandTimeout, commandType);
@@ -382,7 +384,7 @@ public abstract class DapperService {
         => await QueryAsync<T>(sql, param, transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected async Task<IEnumerable<T>> QuerySProcAsync<T>(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null)
-        => await QueryAsync<T>(statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure);
+        => await QueryAsync<T>(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected async Task<IEnumerable<T>> QuerySProcAsync<T>(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null)
         => await QuerySProcAsync<T>(sql.GetDescription(), param, transaction, commandTimeout);
@@ -393,7 +395,7 @@ public abstract class DapperService {
         => await CacheProvider.GetWithRefreshAsync(key, async () => await QueryAsync<T>(sql, param, transaction, commandTimeout, commandType), cacheTime);
 
     protected async Task<IEnumerable<T>> CacheOrQueryAsync<T>(string key, ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime) where T : class
-        => await CacheOrQueryAsync<T>(key, statement.ToSql(), statement.Param, transaction, commandTimeout, commandType, cacheTime);
+        => await CacheOrQueryAsync<T>(key, statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType, cacheTime);
 
     protected async Task<IEnumerable<T>> CacheOrQueryAsync<T>(string key, Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime) where T : class
         => await CacheOrQueryAsync<T>(key, sql.GetDescription(), param, transaction, commandTimeout, commandType, cacheTime);
@@ -408,7 +410,7 @@ public abstract class DapperService {
         => await CacheOrQueryAsync<T>(key, sql, param, transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected async Task<IEnumerable<T>> CacheOrQuerySProcAsync<T>(string key, ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, int cacheTime = DefaultCacheTime) where T : class
-        => await CacheOrQueryAsync<T>(key, statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
+        => await CacheOrQueryAsync<T>(key, statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected async Task<IEnumerable<T>> CacheOrQuerySProcAsync<T>(string key, Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, int cacheTime = DefaultCacheTime) where T : class
         => await CacheOrQuerySProcAsync<T>(key, sql.GetDescription(), param, transaction, commandTimeout, cacheTime);
@@ -422,7 +424,7 @@ public abstract class DapperService {
     }
 
     protected async Task<int> ExecuteAsync(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
-        => await ExecuteAsync(statement.ToSql(), statement.Param, transaction, commandTimeout, commandType);
+        => await ExecuteAsync(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType);
 
     protected async Task<int> ExecuteAsync(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
         => await ExecuteAsync(sql.GetDescription(), param, transaction, commandTimeout, commandType);
@@ -437,7 +439,7 @@ public abstract class DapperService {
         => await ExecuteAsync(sql, param, transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected async Task<int> ExecuteSProcAsync(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null)
-        => await ExecuteAsync(statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure);
+        => await ExecuteAsync(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected async Task<int> ExecuteSProcAsync(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null)
         => await ExecuteSProcAsync(sql.GetDescription(), param, transaction, commandTimeout);
@@ -452,7 +454,7 @@ public abstract class DapperService {
     }
 
     protected async Task<T> ExecuteAsync<T>(ISqlStatement statement, string returnParam, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue)
-        => await ExecuteAsync<T>(statement.ToSql(), returnParam, statement.Param, transaction, commandTimeout, commandType, returnParamDirection);
+        => await ExecuteAsync<T>(statement.ToSql(), returnParam, statement.GetParam(), transaction, commandTimeout, commandType, returnParamDirection);
 
     protected async Task<T> ExecuteAsync<T>(Enum sql, string returnParam, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue)
         => await ExecuteAsync<T>(sql.GetDescription(), returnParam, param, transaction, commandTimeout, commandType, returnParamDirection);
@@ -467,7 +469,7 @@ public abstract class DapperService {
         => await ExecuteAsync<T>(sql, returnParam, param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection);
 
     protected async Task<T> ExecuteSProcAsync<T>(ISqlStatement statement, string returnParam, IDbTransaction transaction = null, int? commandTimeout = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue)
-        => await ExecuteAsync<T>(statement.ToSql(), returnParam, statement.Param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection);
+        => await ExecuteAsync<T>(statement.ToSql(), returnParam, statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection);
 
     protected async Task<T> ExecuteSProcAsync<T>(Enum sql, string returnParam, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue)
         => await ExecuteAsync<T>(sql.GetDescription(), returnParam, param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection);
@@ -478,7 +480,7 @@ public abstract class DapperService {
         => await CacheProvider.GetWithRefreshAsync(key, async () => await ExecuteAsync<T>(sql, returnParam, param, transaction, commandTimeout, commandType, returnParamDirection), cacheTime);
 
     protected async Task<T> CacheOrExecuteAsync<T>(string key, ISqlStatement statement, string returnParam, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue, int cacheTime = DefaultCacheTime) where T : class
-        => await CacheOrExecuteAsync<T>(key, statement.ToSql(), returnParam, statement.Param, transaction, commandTimeout, commandType, returnParamDirection, cacheTime);
+        => await CacheOrExecuteAsync<T>(key, statement.ToSql(), returnParam, statement.GetParam(), transaction, commandTimeout, commandType, returnParamDirection, cacheTime);
 
     protected async Task<T> CacheOrExecuteAsync<T>(string key, Enum sql, string returnParam, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue, int cacheTime = DefaultCacheTime) where T : class
         => await CacheOrExecuteAsync<T>(key, sql.GetDescription(), returnParam, param, transaction, commandTimeout, commandType, returnParamDirection, cacheTime);
@@ -493,7 +495,7 @@ public abstract class DapperService {
         => await CacheOrExecuteAsync<T>(key, sql, returnParam, param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection, cacheTime);
 
     protected async Task<T> CacheOrExecuteSProcAsync<T>(string key, ISqlStatement statement, string returnParam, IDbTransaction transaction = null, int? commandTimeout = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue, int cacheTime = DefaultCacheTime) where T : class
-        => await CacheOrExecuteAsync<T>(key, statement.ToSql(), returnParam, statement.Param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection, cacheTime);
+        => await CacheOrExecuteAsync<T>(key, statement.ToSql(), returnParam, statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection, cacheTime);
 
     protected async Task<T> CacheOrExecuteSProcAsync<T>(string key, Enum sql, string returnParam, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, ParameterDirection returnParamDirection = ParameterDirection.ReturnValue, int cacheTime = DefaultCacheTime) where T : class
         => await CacheOrExecuteAsync<T>(key, sql.GetDescription(), returnParam, param, transaction, commandTimeout, CommandType.StoredProcedure, returnParamDirection, cacheTime);
@@ -507,7 +509,7 @@ public abstract class DapperService {
     }
 
     protected async Task<T> ExecuteScalarAsync<T>(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
-        => await ExecuteScalarAsync<T>(statement.ToSql(), statement.Param, transaction, commandTimeout, commandType);
+        => await ExecuteScalarAsync<T>(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType);
 
     protected async Task<T> ExecuteScalarAsync<T>(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
         => await ExecuteScalarAsync<T>(sql.GetDescription(), param, transaction, commandTimeout, commandType);
@@ -522,7 +524,7 @@ public abstract class DapperService {
         => await ExecuteScalarAsync<T>(sql, param, transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected async Task<T> ExecuteScalarSProcAsync<T>(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null)
-        => await ExecuteScalarAsync<T>(statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure);
+        => await ExecuteScalarAsync<T>(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected async Task<T> ExecuteScalarSProcAsync<T>(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null)
         => await ExecuteScalarSProcAsync<T>(sql.GetDescription(), param, transaction, commandTimeout);
@@ -533,7 +535,7 @@ public abstract class DapperService {
         => await CacheProvider.GetWithRefreshAsync(key, async () => await ExecuteScalarAsync<T>(sql, param, transaction, commandTimeout, commandType), cacheTime);
 
     protected async Task<T> CacheOrExecuteScalarAsync<T>(string key, ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime) where T : class
-        => await CacheOrExecuteScalarAsync<T>(key, statement.ToSql(), statement.Param, transaction, commandTimeout, commandType, cacheTime);
+        => await CacheOrExecuteScalarAsync<T>(key, statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType, cacheTime);
 
     protected async Task<T> CacheOrExecuteScalarAsync<T>(string key, Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime) where T : class
         => await CacheOrExecuteScalarAsync<T>(key, sql.GetDescription(), param, transaction, commandTimeout, commandType, cacheTime);
@@ -548,7 +550,7 @@ public abstract class DapperService {
         => await CacheOrExecuteScalarAsync<T>(key, sql, param, transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected async Task<T> CacheOrExecuteScalarSProcAsync<T>(string key, ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, int cacheTime = DefaultCacheTime) where T : class
-        => await CacheOrExecuteScalarAsync<T>(key, statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
+        => await CacheOrExecuteScalarAsync<T>(key, statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected async Task<T> CacheOrExecuteScalarSProcAsync<T>(string key, Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, int cacheTime = DefaultCacheTime) where T : class
         => await CacheOrExecuteScalarSProcAsync<T>(key, sql.GetDescription(), param, transaction, commandTimeout, cacheTime);
@@ -562,7 +564,7 @@ public abstract class DapperService {
     }
 
     protected async Task<SqlMapper.GridReader> QueryMultipleAsync(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
-        => await QueryMultipleAsync(statement.ToSql(), statement.Param, transaction, commandTimeout, commandType);
+        => await QueryMultipleAsync(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType);
 
     protected async Task<SqlMapper.GridReader> QueryMultipleAsync(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
         => await QueryMultipleAsync(sql.GetDescription(), param, transaction, commandTimeout, commandType);
@@ -577,7 +579,7 @@ public abstract class DapperService {
         => await QueryMultipleAsync(sql, param, transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected async Task<SqlMapper.GridReader> QueryMultipleSProcAsync(ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null)
-        => await QueryMultipleAsync(statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure);
+        => await QueryMultipleAsync(statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure);
 
     protected async Task<SqlMapper.GridReader> QueryMultipleSProcAsync(Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null)
         => await QueryMultipleSProcAsync(sql.GetDescription(), param, transaction, commandTimeout);
@@ -588,7 +590,7 @@ public abstract class DapperService {
         => await CacheProvider.GetWithRefreshAsync(key, async () => await QueryMultipleAsync(sql, param, transaction, commandTimeout, commandType), cacheTime);
 
     protected async Task<SqlMapper.GridReader> CacheOrQueryMultipleAsync(string key, ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime)
-        => await CacheOrQueryMultipleAsync(key, statement.ToSql(), statement.Param, transaction, commandTimeout, commandType, cacheTime);
+        => await CacheOrQueryMultipleAsync(key, statement.ToSql(), statement.GetParam(), transaction, commandTimeout, commandType, cacheTime);
 
     protected async Task<SqlMapper.GridReader> CacheOrQueryMultipleAsync(string key, Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, int cacheTime = DefaultCacheTime)
         => await CacheOrQueryMultipleAsync(key, sql.GetDescription(), param, transaction, commandTimeout, commandType, cacheTime);
@@ -603,7 +605,7 @@ public abstract class DapperService {
         => await CacheOrQueryMultipleAsync(key, sql, param, transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected async Task<SqlMapper.GridReader> CacheOrQueryMultipleSProcAsync(string key, ISqlStatement statement, IDbTransaction transaction = null, int? commandTimeout = null, int cacheTime = DefaultCacheTime)
-        => await CacheOrQueryMultipleAsync(key, statement.ToSql(), statement.Param, transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
+        => await CacheOrQueryMultipleAsync(key, statement.ToSql(), statement.GetParam(), transaction, commandTimeout, CommandType.StoredProcedure, cacheTime);
 
     protected async Task<SqlMapper.GridReader> CacheOrQueryMultipleSProcAsync(string key, Enum sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, int cacheTime = DefaultCacheTime)
         => await CacheOrQueryMultipleSProcAsync(key, sql.GetDescription(), param, transaction, commandTimeout, cacheTime);

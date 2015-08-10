@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\tixinc\tixinc-net\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
+    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, PublicKeyToken=e3e8412083d25dd3, processorArchitecture=MSIL">
+      <HintPath>..\..\tixinc\tixinc-net\packages\Dapper.StrongName.1.40\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -64,31 +64,63 @@
     <Compile Include="Patterns\Attributes\EntityAttribute.cs" />
     <Compile Include="Patterns\Attributes\GrammarAttribute.cs" />
     <Compile Include="Patterns\Attributes\PrimaryColumnAttribute.cs" />
-    <Compile Include="Patterns\Chainables\Args.cs" />
-    <Compile Include="Patterns\Chainables\ArgsMap.cs" />
-    <Compile Include="Patterns\Chainables\Chainable.cs" />
-    <Compile Include="Patterns\Chainables\ChainableSql.cs" />
-    <Compile Include="Patterns\Chainables\IChainable.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasColumns.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasConditional.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasDistinct.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasFrom.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasGroupBy.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasNoLock.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasOrderBy.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasSet.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasTop.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasValues.cs" />
-    <Compile Include="Patterns\Chainables\Implements\IHasWhere.cs" />
-    <Compile Include="Patterns\Chainables\ISqlClause.cs" />
-    <Compile Include="Patterns\Chainables\ISqlStatement.cs" />
-    <Compile Include="Patterns\Chainables\ISqlSyntax.cs" />
-    <Compile Include="Patterns\Chainables\SqlArgs.cs" />
-    <Compile Include="Patterns\Chainables\SqlArgsMap.cs" />
-    <Compile Include="Patterns\Chainables\SqlClause.cs" />
-    <Compile Include="Patterns\Chainables\SqlStatement.cs" />
-    <Compile Include="Patterns\Chainables\SqlSyntax.cs" />
-    <Compile Include="Patterns\Chainables\SqlWhere.cs" />
+    <Compile Include="Patterns\Chainable\Args.cs" />
+    <Compile Include="Patterns\Chainable\ArgsMap.cs" />
+    <Compile Include="Patterns\Chainable\Chainable.cs" />
+    <Compile Include="Patterns\Chainable\ChainableSql.cs" />
+    <Compile Include="Patterns\Chainable\IChainable.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IBuildsParam.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasInversion.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasParam.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasCondition.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasTable.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Object\ISqlObject.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Object\ISqlTable.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasAndCondition.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasColumns.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasExpression.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasDistinct.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasFrom.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasGroupBy.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasNoLock.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasOn.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasOrCondition.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasOrderBy.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasSet.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasTop.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasValues.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasWhere.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\ISqlClause.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\ISqlCondition.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\IClauseNotYetImplemented.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Implements\IHasJoin.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Object\SqlTable.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\ISqlDelete.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\ISqlFrom.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\ISqlInsert.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\ISqlJoin.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\ISqlOn.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\ISqlSelect.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\ISqlSet.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\ISqlStatement.cs" />
+    <Compile Include="Patterns\Chainable\ISqlSyntax.cs" />
+    <Compile Include="Patterns\Chainable\SqlArgs.cs" />
+    <Compile Include="Patterns\Chainable\SqlArgsMap.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\SqlClause.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\SqlCondition.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\ISqlUpdate.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\IStatementNotYetImplemented.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\SqlDelete.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\SqlFrom.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\SqlInsert.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\SqlJoin.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\SqlOn.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\SqlSelect.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\SqlSet.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\SqlStatement.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\ISqlWhere.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Clause\SqlWhere.cs" />
+    <Compile Include="Patterns\Chainable\Syntax\Statement\SqlUpdate.cs" />
     <Compile Include="Patterns\Exceptions\SqlPatternException.cs" />
     <Compile Include="Patterns\Metadata\ColumnMetadata.cs" />
     <Compile Include="Patterns\Metadata\EntityMetadata.cs" />

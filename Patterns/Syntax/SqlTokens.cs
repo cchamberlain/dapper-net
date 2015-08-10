@@ -4,6 +4,7 @@
         #region boolean
         public const string And = "AND";
         public const string Or = "OR";
+        public const string Not = "NOT";
         #endregion
 
         #region equality
