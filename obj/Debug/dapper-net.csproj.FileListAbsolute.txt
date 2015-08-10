@@ -1,5 +1,4 @@
 C:\Users\cchamberlain\cchamberlain\dapper-net\dapper-net\obj\Debug\dapper-net.csprojResolveAssemblyReference.cache
-C:\Users\cchamberlain\cchamberlain\dapper-net\obj\Debug\dapper-net.csprojResolveAssemblyReference.cache
 C:\Users\cchamberlain\cchamberlain\dapper-net\bin\Debug\dapper-net.dll
 C:\Users\cchamberlain\cchamberlain\dapper-net\bin\Debug\dapper-net.pdb
 C:\Users\cchamberlain\cchamberlain\dapper-net\bin\Debug\Dapper.dll
@@ -16,5 +15,6 @@ C:\Users\cchamberlain\cchamberlain\dapper-net\bin\Debug\pt\Microsoft.SqlServer.T
 C:\Users\cchamberlain\cchamberlain\dapper-net\bin\Debug\ru\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll
 C:\Users\cchamberlain\cchamberlain\dapper-net\bin\Debug\zh-Hans\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll
 C:\Users\cchamberlain\cchamberlain\dapper-net\bin\Debug\zh-Hant\Microsoft.SqlServer.TransactSql.ScriptDom.resources.dll
+C:\Users\cchamberlain\cchamberlain\dapper-net\obj\Debug\dapper-net.csprojResolveAssemblyReference.cache
 C:\Users\cchamberlain\cchamberlain\dapper-net\obj\Debug\dapper-net.dll
 C:\Users\cchamberlain\cchamberlain\dapper-net\obj\Debug\dapper-net.pdb

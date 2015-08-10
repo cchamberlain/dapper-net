@@ -7,7 +7,7 @@ using static System.TimeSpan;
 namespace Dapper.Net.Caching {
 
     public class DefaultCacheProvider : ICacheProvider {
-        internal static Lazy<DefaultCacheProvider> Instance = new Lazy<DefaultCacheProvider>(() => new DefaultCacheProvider()); 
+        public static Lazy<DefaultCacheProvider> LazyCache = new Lazy<DefaultCacheProvider>(() => new DefaultCacheProvider()); 
         private static ObjectCache Cache => MemoryCache.Default;
         public object Get(string key) => Cache[key];
 
