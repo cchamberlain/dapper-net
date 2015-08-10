@@ -4,12 +4,12 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
+    <authors>Cole Chamberlain</authors>
+    <owners>Cole Chamberlain</owners>
     <licenseUrl>https://raw.githubusercontent.com/cchamberlain/dapper-net/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/cchamberlain/dapper-net</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>Extensions to dapper-dot-net</description>
     <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>dapper-js dapper-net dapper-net-automation sql</tags>
