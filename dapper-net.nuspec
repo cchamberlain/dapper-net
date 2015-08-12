@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
-    <title>$title$</title>
+    <id>dapper.net</id>
+    <version>0.1.1</version>
+    <title>dapper-net</title>
     <authors>Cole Chamberlain</authors>
     <owners>Cole Chamberlain</owners>
     <licenseUrl>https://raw.githubusercontent.com/cchamberlain/dapper-net/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/cchamberlain/dapper-net</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Extensions to dapper-dot-net</description>
-    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <releaseNotes>Initial release, contains DapperService abstract class and other functionality to support dapper-js node project.</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>dapper-js dapper-net dapper-net-automation sql</tags>
   </metadata>

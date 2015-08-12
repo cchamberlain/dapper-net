@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dapper.Net</RootNamespace>
-    <AssemblyName>dapper-net</AssemblyName>
+    <AssemblyName>dapper.net</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -133,9 +133,22 @@
     <Compile Include="Validation\SqlParser.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\publish.ps1" />
+    <None Include="dapper-net.nuspec" />
+    <None Include="JSLintNet.json" />
+    <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="lib\net46\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(ProjectDir)$(OutDir)dapper.net.* $(ProjectDir)lib\net46</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
